@@ -30,44 +30,26 @@ function get(url){
 }
 //NUMBER FACTS
 //get fact about favorite number
-const someFact = (num) => {
-    return somePromise = get(`http://numbersapi.com/${num}`)
-        .then(res => console.log(res.data))
-        .catch(err => console.log("rejected", err))
+let baseURL = "http://numbersapi.com";
+let num = 7;
+async function someFact(){
+    let res = await get(`${baseURL}/${num}?json`);
+    console.log(res);
 }
-someFact(7);
+someFact();
 //get data on multiple numbers in single request and put all of them on page
-let fourNumPromises = [];
-for(let i = 1; i < 5; i++){
-    fourNumPromises.push(get(`http://numbersapi.com/${i}`));
+let nums = [3,4,5];
+async function someFacts(){
+    let res = await get(`${baseURL}/${nums}?json`);
+    console.log(res)
 }
-Promise.all(fourNumPromises)
-    .then(numArr => {
-        for(res of numArr){
-            console.log(res.data);
-        }
-    })
-    .catch(err => console.log(err));
-
+someFacts();
 //get 4 facts on favorite number
-let url = "http://numbersapi.com/3";
-let Promise1 = get(url)
-    .then(res => {
-        console.log(res.data);
+async function fourFacts(){
+    let facts = await Promise.all(Array.from({length: 4}, () => get(`${baseURL}/${num}?json`)));
+    facts.forEach(res => {
+        let msg = res.data.text;
+        console.log(msg);
     })
-    .catch(err => console.log("rejected", err));
-let Promise2 = get(url)
-    .then(res => {
-        console.log(res.data);
-    })
-    .catch(err => console.log("rejected", err));
-let Promise3 = get(url)
-    .then(res => {
-        console.log(res.data);
-    })
-    .catch(err => console.log("rejected", err));
-let Promise4 = get(url)
-    .then(res => {
-        console.log(res.data);
-    })
-    .catch(err => console.log("rejected", err));
+}
+fourFacts();
